@@ -5,7 +5,9 @@
  */
 package Application;
 
-import boardGame.Position;
+import Chess.ChessMatch;
+import Chess.UI;
+
 
 /**
  *
@@ -13,8 +15,10 @@ import boardGame.Position;
  */
 public class Program {
     public static void main(String[] args) {
-        Position p1 = new Position(4,2);
-        System.out.println(p1);
+      ChessMatch jogo = new ChessMatch();
+      UI.printBoard(jogo.getPieces());
+        
+        
     }
     
     
