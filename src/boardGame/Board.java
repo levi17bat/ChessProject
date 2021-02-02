@@ -1,24 +1,20 @@
-
 package boardGame;
 
-
 public class Board {
+
     private int rows;
     private int columns;
-    private Piece[][]pieces;
-    
-    
+    private Piece[][] pieces;
+
     //constructors
-    public Board(int rows,int columns){
-    this.rows =rows;
-    this.columns = columns;
-    pieces = new Piece[rows][columns];
+    public Board(int rows, int columns) {
+        this.rows = rows;
+        this.columns = columns;
+        pieces = new Piece[rows][columns];
     }
     //end constructors
     //get and set
-    
-    
-    
+
     public int getRows() {
         return rows;
     }
@@ -34,17 +30,21 @@ public class Board {
     public void setColumns(int columns) {
         this.columns = columns;
     }
-    
+
     //end get and set
 //others
-    public Piece piece(int row, int column){
-    return this.pieces[row][column];
+    public Piece piece(int row, int column) {
+        return this.pieces[row][column];
     }
-    
-    public Piece piece(Position position){
-    return this.pieces[position.getRow()][position.getColumn()];
+
+    public Piece piece(Position position) {
+        return this.pieces[position.getRow()][position.getColumn()];
     }
-    
+
+    public void placePiece(Piece piece, Position position) {//esse método coloca a peça na posição do tabuleiro
+        pieces[position.getRow()][position.getColumn()] = piece;
+        piece.position = position;
+    }
     //end others 
-    
+
 }

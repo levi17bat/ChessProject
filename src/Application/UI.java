@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Chess;
+package Application;
 
-public class UI {
+import Chess.ChessPiece;
+
+public class UI {//user interface
 
     public static void printBoard(ChessPiece[][] pec) {
         int aux = 8;
