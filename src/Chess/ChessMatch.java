@@ -19,10 +19,16 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
     }
 
     //end constructor
-   
+    private void placeNewPiece(char column, int row, ChessPiece piece){
+    board.placePiece(piece, new ChessPosition(column,row).toPosition());
+    }
+    
+    
+    
     public void initialSetup(){
-    this.board.placePiece(new Rook(WHITE,this.board), new Position(2,1));
-    this.board.placePiece(new King(WHITE,this.board), new Position(0,1));
+    placeNewPiece('b',6,new Rook(WHITE,this.board));
+    placeNewPiece('e',8,new King(COLOR.BLACK,this.board));
+    placeNewPiece('e',1,new King(COLOR.WHITE,this.board));
     }
     
     public ChessPiece[][] getPieces() {//classe para retornar uma matriz que percorre o tabuleiro
