@@ -53,6 +53,19 @@ public class Board {
         piece.position = position;
     }
 
+    public Piece removePiece(Position position){
+    if(!positionsExists(position)){
+    throw new BoardException("Position not on the board");
+    }
+    if(piece(position)==null){
+        return null;
+    }
+    Piece aux = piece(position);
+    aux.position = null;
+    this.pieces[position.getRow()][position.getColumn()]=null;
+    return aux;
+    }
+    
     public boolean positionsExists(Position pos) {//estou testando quando uma posição, numa
         //dada linha e coluna, existe? quando a posição está dentro do tabuleiro. 
 
@@ -76,5 +89,7 @@ public class Board {
         //só testando se uma condição é verdadeira
     }
 
+    
+    
     //end others 
 }

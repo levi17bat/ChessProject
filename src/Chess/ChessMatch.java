@@ -1,9 +1,11 @@
 package Chess;
 
 import static Chess.COLOR.WHITE;
+import Chess.Exceptions.ChessException;
 import Chess.Pieces.Rook;
 import Chess.Pieces.King;
 import boardGame.Board;
+import boardGame.Piece;
 import boardGame.Position;
 
 public class ChessMatch {//o coração do nosso jogo de xadrez
@@ -17,10 +19,33 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
     }
 
     //end constructor
+    public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition) {
+        Position source = sourcePosition.toPosition();
+        Position target = targetPosition.toPosition();
+        validateSourcePosition(source);
+        Piece capturedPiece = makeMove(source, target);
+        return (ChessPiece) capturedPiece;
+
+    }
+
+    private Piece makeMove(Position origin, Position target){
+    Piece p = board.removePiece(origin);
+    Piece capturedPiece = board.removePiece(target);
+    board.placePiece(p, target);
+    return capturedPiece;
+    }
+   
+    
+    public void validateSourcePosition(Position position) {
+        if (!board.thereIsAPiece(position)) {
+          throw new ChessException("There's no piece in the positon");
+        }
+        
+    }
     private void placeNewPiece(char column, int row, ChessPiece piece) {
         board.placePiece(piece, new ChessPosition(column, row).toPosition());
     }
-    
+
     public void initialSetup() {
         placeNewPiece('c', 1, new Rook(board, COLOR.WHITE));
         placeNewPiece('c', 2, new Rook(board, COLOR.WHITE));
