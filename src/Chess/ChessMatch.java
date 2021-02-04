@@ -40,6 +40,10 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
         if (!board.thereIsAPiece(position)) {
           throw new ChessException("There's no piece in the positon");
         }
+        if(!board.piece(position).isThereAnyPossibleMovie()){
+        throw new ChessException("There is no possible moves for the chosen piece");
+        }
+        
         
     }
     private void placeNewPiece(char column, int row, ChessPiece piece) {
