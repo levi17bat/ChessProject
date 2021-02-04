@@ -13,6 +13,7 @@ public class King extends ChessPiece{
     
     public King(Board board, COLOR color) {
         super(board,color);
+        
     }
     
     @Override
