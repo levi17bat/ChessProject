@@ -28,10 +28,13 @@ public class Program {
                 ChessPiece capturedPiece = jogo.performChessMove(source, target);
             } catch (ChessException e) {
                 System.out.println(e.getMessage());
+                ler.nextLine();
             } catch (InputMismatchException e) {
                 System.out.println(e.getMessage());
+                ler.nextLine();
             } catch (RuntimeException e) {
                 System.out.println(e.getMessage());
+                ler.nextLine();
             }
 
         }

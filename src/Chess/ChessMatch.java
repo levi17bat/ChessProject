@@ -7,6 +7,7 @@ import Chess.Pieces.King;
 import boardGame.Board;
 import boardGame.Piece;
 import boardGame.Position;
+import java.util.Scanner;
 
 public class ChessMatch {//o coração do nosso jogo de xadrez
 
@@ -22,30 +23,39 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
     public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition) {
         Position source = sourcePosition.toPosition();
         Position target = targetPosition.toPosition();
-        validateSourcePosition(source);
+        validateSourcePosition(source);//validando posição de origem
+        validateTargetPosition(source,target);//validando posição de destino
         Piece capturedPiece = makeMove(source, target);
         return (ChessPiece) capturedPiece;
 
     }
 
-    private Piece makeMove(Position origin, Position target){
-    Piece p = board.removePiece(origin);
-    Piece capturedPiece = board.removePiece(target);
-    board.placePiece(p, target);
-    return capturedPiece;
+    private Piece makeMove(Position origin, Position target) {
+        Piece p = board.removePiece(origin);
+        Piece capturedPiece = board.removePiece(target);
+        board.placePiece(p, target);
+        return capturedPiece;
     }
-   
-    
-    public void validateSourcePosition(Position position) {
+
+    private void validateSourcePosition(Position position) {
         if (!board.thereIsAPiece(position)) {
-          throw new ChessException("There's no piece in the positon");
+            throw new ChessException("There's no piece in the positon");
         }
-        if(!board.piece(position).isThereAnyPossibleMovie()){
-        throw new ChessException("There is no possible moves for the chosen piece");
+        if (!board.piece(position).isThereAnyPossibleMovie()) {
+            throw new ChessException("There is no possible moves for the chosen piece");
         }
-        
-        
     }
+
+    private void validateTargetPosition(Position source, Position target) {
+        Scanner ler = new Scanner(System.in);
+        
+        if (!board.piece(source).possibleMovia(target)) {
+            throw new ChessException("The chosen piece can't be moved target positon");
+        }
+       
+
+    }
+
     private void placeNewPiece(char column, int row, ChessPiece piece) {
         board.placePiece(piece, new ChessPosition(column, row).toPosition());
     }
