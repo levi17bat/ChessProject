@@ -18,8 +18,19 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
         this.board = new Board(8, 8);
         initialSetup();
     }
+    
+    
 
     //end constructor
+    
+    public boolean[][] possibleMoves(ChessPosition sourcePosition){
+       Position position = sourcePosition.toPosition();
+       this.validateSourcePosition(position);
+       return board.piece(position).possibleMovies();  
+    }
+    
+    
+    
     public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition) {
         Position source = sourcePosition.toPosition();
         Position target = targetPosition.toPosition();
