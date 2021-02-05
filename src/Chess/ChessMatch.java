@@ -11,32 +11,40 @@ import java.util.Scanner;
 
 public class ChessMatch {//o coração do nosso jogo de xadrez
 
+    private int turn;
     private Board board;
+    private COLOR currentPlayer;
 
     //constructor
     public ChessMatch() {//assim que o objeto é criado, já fala o tamanho do tabuleiro
         this.board = new Board(8, 8);
+        this.turn = 1;
+        this.currentPlayer = COLOR.WHITE;
         initialSetup();
     }
-    
-    
 
     //end constructor
-    
-    public boolean[][] possibleMoves(ChessPosition sourcePosition){
-       Position position = sourcePosition.toPosition();
-       this.validateSourcePosition(position);
-       return board.piece(position).possibleMovies();  
+    public int getTurn() {
+        return this.turn;
     }
-    
-    
-    
+
+    public COLOR getCurrentPlayer() {
+        return this.currentPlayer;
+    }
+
+    public boolean[][] possibleMoves(ChessPosition sourcePosition) {
+        Position position = sourcePosition.toPosition();
+        this.validateSourcePosition(position);
+        return board.piece(position).possibleMovies();
+    }
+
     public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition) {
         Position source = sourcePosition.toPosition();
         Position target = targetPosition.toPosition();
         validateSourcePosition(source);//validando posição de origem
-        validateTargetPosition(source,target);//validando posição de destino
+        validateTargetPosition(source, target);//validando posição de destino
         Piece capturedPiece = makeMove(source, target);
+        nextTurn();
         return (ChessPiece) capturedPiece;
 
     }
@@ -55,16 +63,23 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
         if (!board.piece(position).isThereAnyPossibleMovie()) {
             throw new ChessException("There is no possible moves for the chosen piece");
         }
+        if (this.currentPlayer != ((ChessPiece) (board.piece(position))).getColor()) {
+            throw new ChessException("The chosen piece isn't yours");
+        }
     }
 
     private void validateTargetPosition(Position source, Position target) {
         Scanner ler = new Scanner(System.in);
-        
+
         if (!board.piece(source).possibleMovia(target)) {
             throw new ChessException("The chosen piece can't be moved target positon");
         }
-       
 
+    }
+
+    private void nextTurn() {
+        this.turn++;
+        this.currentPlayer = (this.currentPlayer == COLOR.WHITE) ? COLOR.BLACK : COLOR.WHITE;
     }
 
     private void placeNewPiece(char column, int row, ChessPiece piece) {
