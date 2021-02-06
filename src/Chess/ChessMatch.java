@@ -10,6 +10,7 @@ import boardGame.Position;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class ChessMatch {//o coração do nosso jogo de xadrez
 
@@ -19,6 +20,7 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
     private int turn;
     private Board board;
     private COLOR currentPlayer;
+    private boolean check;//por padrão começa com falso
 
     //constructor
     public ChessMatch() {//assim que o objeto é criado, já fala o tamanho do tabuleiro
@@ -27,10 +29,13 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
         this.currentPlayer = COLOR.WHITE;
         initialSetup();
 
-
     }
 
     //end constructor
+    
+    public boolean getCheck(){
+    return this.check;
+    }
     public int getTurn() {
         return this.turn;
     }
@@ -51,6 +56,13 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
         validateSourcePosition(source);//validando posição de origem
         validateTargetPosition(source, target);//validando posição de destino
         Piece capturedPiece = makeMove(source, target);
+
+        if (testCheck(this.currentPlayer)) {
+            undoMove(source, target, capturedPiece);
+            throw new ChessException("You can't put yourself in check");
+        }
+        this.check = (testCheck(opponent(currentPlayer))) ? true : false;
+
         nextTurn();
         return (ChessPiece) capturedPiece;
 
@@ -59,12 +71,24 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
     private Piece makeMove(Position origin, Position target) {
         Piece p = board.removePiece(origin);
         Piece capturedPiece = board.removePiece(target);
-        if(capturedPiece !=null){
-        this.piecesOnTheBoard.remove(capturedPiece);
-        this.capturedPieces.add(capturedPiece);
+        if (capturedPiece != null) {
+            this.piecesOnTheBoard.remove(capturedPiece);
+            this.capturedPieces.add(capturedPiece);
         }
         board.placePiece(p, target);
         return capturedPiece;
+    }
+
+    private void undoMove(Position origin, Position target, Piece capturedPiece) {
+        Piece p = board.removePiece(target);
+        board.placePiece(p, origin);
+
+        if (capturedPiece != null) {
+            board.placePiece(capturedPiece, target);
+            capturedPieces.remove(capturedPiece);
+            this.piecesOnTheBoard.add(capturedPiece);
+        }
+
     }
 
     private void validateSourcePosition(Position position) {
@@ -113,6 +137,33 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
         placeNewPiece('e', 8, new Rook(board, COLOR.BLACK));
         placeNewPiece('d', 8, new King(board, COLOR.BLACK));
 
+    }
+
+    private COLOR opponent(COLOR color) {
+        return (color.equals(COLOR.WHITE)) ? COLOR.BLACK : COLOR.WHITE;
+    }
+
+    private ChessPiece king(COLOR color) {
+        List<Piece> list = this.piecesOnTheBoard.stream().filter(x -> ((ChessPiece) x).getColor().equals(color)).collect(Collectors.toList());
+        for (Piece p : list) {
+            if (p instanceof King) {
+                return (ChessPiece) p;
+            }
+        }
+        throw new IllegalStateException("There's no " + color + " king on the board.");
+    }
+
+    private boolean testCheck(COLOR color) {
+        Position kingPosition = king(color).getChessPosition().toPosition();
+        List<Piece> opponentPieces = this.piecesOnTheBoard.stream().filter(x -> ((ChessPiece) x).getColor().equals(this.opponent(color))).collect(Collectors.toList());
+
+        for (Piece p : opponentPieces) {
+            boolean[][] mat = p.possibleMovies();
+            if (mat[kingPosition.getRow()][kingPosition.getColumn()]) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public ChessPiece[][] getPieces() {//classe para retornar uma matriz que percorre o tabuleiro
