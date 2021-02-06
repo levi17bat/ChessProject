@@ -7,9 +7,14 @@ import Chess.Pieces.King;
 import boardGame.Board;
 import boardGame.Piece;
 import boardGame.Position;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class ChessMatch {//o coração do nosso jogo de xadrez
+
+    private List<Piece> piecesOnTheBoard = new ArrayList<>();
+    private List<Piece> capturedPieces = new ArrayList<>();
 
     private int turn;
     private Board board;
@@ -21,6 +26,8 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
         this.turn = 1;
         this.currentPlayer = COLOR.WHITE;
         initialSetup();
+
+
     }
 
     //end constructor
@@ -52,6 +59,10 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
     private Piece makeMove(Position origin, Position target) {
         Piece p = board.removePiece(origin);
         Piece capturedPiece = board.removePiece(target);
+        if(capturedPiece !=null){
+        this.piecesOnTheBoard.remove(capturedPiece);
+        this.capturedPieces.add(capturedPiece);
+        }
         board.placePiece(p, target);
         return capturedPiece;
     }
@@ -84,6 +95,7 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
 
     private void placeNewPiece(char column, int row, ChessPiece piece) {
         board.placePiece(piece, new ChessPosition(column, row).toPosition());
+        this.piecesOnTheBoard.add(piece);
     }
 
     public void initialSetup() {
