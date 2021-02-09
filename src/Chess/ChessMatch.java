@@ -2,6 +2,7 @@ package Chess;
 
 import static Chess.COLOR.WHITE;
 import Chess.Exceptions.ChessException;
+import Chess.Pieces.Bishop;
 import Chess.Pieces.Rook;
 import Chess.Pieces.King;
 import Chess.Pieces.Pawn;
@@ -131,6 +132,8 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
     }
 
     public void initialSetup() {
+        placeNewPiece('c', 1, new Bishop(board, COLOR.WHITE));
+        placeNewPiece('f', 1, new Bishop(board, COLOR.WHITE));
         placeNewPiece('a', 1, new Rook(board, COLOR.WHITE));
         placeNewPiece('e', 1, new King(board, COLOR.WHITE));
         placeNewPiece('h', 1, new Rook(board, COLOR.WHITE));
@@ -142,7 +145,8 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
         placeNewPiece('f', 2, new Pawn(board, COLOR.WHITE));
         placeNewPiece('g', 2, new Pawn(board, COLOR.WHITE));
         placeNewPiece('h', 2, new Pawn(board, COLOR.WHITE));
-
+        placeNewPiece('c', 8, new Bishop(board, COLOR.BLACK));
+        placeNewPiece('f', 8, new Bishop(board, COLOR.BLACK));
         placeNewPiece('a', 8, new Rook(board, COLOR.BLACK));
         placeNewPiece('e', 8, new King(board, COLOR.BLACK));
         placeNewPiece('h', 8, new Rook(board, COLOR.BLACK));
