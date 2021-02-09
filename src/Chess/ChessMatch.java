@@ -7,6 +7,7 @@ import Chess.Pieces.Rook;
 import Chess.Pieces.King;
 import Chess.Pieces.Knight;
 import Chess.Pieces.Pawn;
+import Chess.Pieces.Queen;
 import boardGame.Board;
 import boardGame.Piece;
 import boardGame.Position;
@@ -149,6 +150,10 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
         placeNewPiece('f', 2, new Pawn(board, COLOR.WHITE));
         placeNewPiece('g', 2, new Pawn(board, COLOR.WHITE));
         placeNewPiece('h', 2, new Pawn(board, COLOR.WHITE));
+        placeNewPiece('d', 1, new Queen(board, COLOR.WHITE));
+        
+        
+        
         placeNewPiece('c', 8, new Bishop(board, COLOR.BLACK));
         placeNewPiece('f', 8, new Bishop(board, COLOR.BLACK));
         placeNewPiece('b', 8, new Knight(board, COLOR.BLACK));
@@ -164,7 +169,7 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
         placeNewPiece('f', 7, new Pawn(board, COLOR.BLACK));
         placeNewPiece('g', 7, new Pawn(board, COLOR.BLACK));
         placeNewPiece('h', 7, new Pawn(board, COLOR.BLACK));
-
+        placeNewPiece('d', 8, new Queen(board, COLOR.BLACK));
     }
 
     private COLOR opponent(COLOR color) {

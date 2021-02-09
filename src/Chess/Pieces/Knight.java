@@ -53,7 +53,7 @@ public class Knight extends ChessPiece {//aoooba cavalo
         }
 
         p.setValues(this.position.getRow()-2, this.position.getColumn() + 1);
-        if (getBoard().positionsExists(p) && canMove(p)) {
+        if (getBoard().positionsExists(p) && canMove(p)) {  
             mat[p.getRow()][p.getColumn()] = true;
         }
 
