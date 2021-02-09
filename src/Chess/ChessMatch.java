@@ -17,11 +17,13 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
     private List<Piece> piecesOnTheBoard = new ArrayList<>();
     private List<Piece> capturedPieces = new ArrayList<>();
 
+    private boolean checkMate;
     private int turn;
     private Board board;
     private COLOR currentPlayer;
     private boolean check;//por padrão começa com falso
-
+    
+    
     //constructor
     public ChessMatch() {//assim que o objeto é criado, já fala o tamanho do tabuleiro
         this.board = new Board(8, 8);
@@ -32,10 +34,10 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
     }
 
     //end constructor
-    
-    public boolean getCheck(){
-    return this.check;
+    public boolean getCheck() {
+        return this.check;
     }
+
     public int getTurn() {
         return this.turn;
     }
@@ -63,7 +65,13 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
         }
         this.check = (testCheck(opponent(currentPlayer))) ? true : false;
 
+        
+        
+        if(this.testCheckMate(opponent(currentPlayer))){
+        this.checkMate = true;
+        }else {
         nextTurn();
+        }
         return (ChessPiece) capturedPiece;
 
     }
@@ -123,20 +131,11 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
     }
 
     public void initialSetup() {
-        placeNewPiece('c', 1, new Rook(board, COLOR.WHITE));
-        placeNewPiece('c', 2, new Rook(board, COLOR.WHITE));
-        placeNewPiece('d', 2, new Rook(board, COLOR.WHITE));
-        placeNewPiece('e', 2, new Rook(board, COLOR.WHITE));
-        placeNewPiece('e', 1, new Rook(board, COLOR.WHITE));
-        placeNewPiece('d', 1, new King(board, COLOR.WHITE));
-
-        placeNewPiece('c', 7, new Rook(board, COLOR.BLACK));
-        placeNewPiece('c', 8, new Rook(board, COLOR.BLACK));
-        placeNewPiece('d', 7, new Rook(board, COLOR.BLACK));
-        placeNewPiece('e', 7, new Rook(board, COLOR.BLACK));
-        placeNewPiece('e', 8, new Rook(board, COLOR.BLACK));
-        placeNewPiece('d', 8, new King(board, COLOR.BLACK));
-
+        placeNewPiece('h', 7, new Rook(board, COLOR.WHITE));
+        placeNewPiece('d', 1, new Rook(board, COLOR.WHITE));
+        placeNewPiece('e', 1, new King(board, COLOR.WHITE));
+        placeNewPiece('b', 8, new Rook(board, COLOR.BLACK));
+        placeNewPiece('a', 8, new King(board, COLOR.BLACK));
     }
 
     private COLOR opponent(COLOR color) {
@@ -147,10 +146,14 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
         List<Piece> list = this.piecesOnTheBoard.stream().filter(x -> ((ChessPiece) x).getColor().equals(color)).collect(Collectors.toList());
         for (Piece p : list) {
             if (p instanceof King) {
-                return (ChessPiece) p;
+                return (ChessPiece)p;
             }
         }
         throw new IllegalStateException("There's no " + color + " king on the board.");
+    }
+
+    public boolean getCheckMate() {
+        return this.checkMate;
     }
 
     private boolean testCheck(COLOR color) {
@@ -164,6 +167,33 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
             }
         }
         return false;
+    }
+
+    public boolean testCheckMate(COLOR color) {
+        if (!testCheck(color)) {//programação defensiva básica
+            return false;
+        }
+        List<Piece> list = this.piecesOnTheBoard.stream().filter(x -> ((ChessPiece) x).getColor() == color).collect(Collectors.toList());
+        for (Piece p : list) {
+            boolean[][] mat = p.possibleMovies();
+            for (int a = 0; a < board.getRows(); a++) {
+                for (int b = 0; b < this.board.getColumns(); b++) {
+                    if (mat[a][b]) {//se é um movimento possível, MOVIMENTE-SE. GARAIO
+                        Position source = ((ChessPiece) p).getChessPosition().toPosition();//pegando o movimento 
+                        Position target = new Position(a, b);
+                        Piece capturedPiece = makeMove(source, target);//fazendo movimento
+                        boolean testCheck = testCheck(color);//testando se, depois do movimento, ainda está em check
+                        this.undoMove(source, target, capturedPiece);//desfazendo movimento
+                        if (!testCheck) {
+                            return false;
+                        }
+
+                    }
+                }
+            }
+
+        }
+        return true;
     }
 
     public ChessPiece[][] getPieces() {//classe para retornar uma matriz que percorre o tabuleiro
