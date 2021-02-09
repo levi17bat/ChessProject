@@ -10,10 +10,6 @@ import Chess.ChessPiece;
 import boardGame.Board;
 import boardGame.Position;
 
-/**
- *
- * @author Levi
- */
 public class Rook extends ChessPiece {
 
     public Rook(Board board, COLOR color) {

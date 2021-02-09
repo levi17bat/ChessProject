@@ -4,6 +4,7 @@ import static Chess.COLOR.WHITE;
 import Chess.Exceptions.ChessException;
 import Chess.Pieces.Rook;
 import Chess.Pieces.King;
+import Chess.Pieces.Pawn;
 import boardGame.Board;
 import boardGame.Piece;
 import boardGame.Position;
@@ -22,8 +23,7 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
     private Board board;
     private COLOR currentPlayer;
     private boolean check;//por padrão começa com falso
-    
-    
+
     //constructor
     public ChessMatch() {//assim que o objeto é criado, já fala o tamanho do tabuleiro
         this.board = new Board(8, 8);
@@ -65,19 +65,17 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
         }
         this.check = (testCheck(opponent(currentPlayer))) ? true : false;
 
-        
-        
-        if(this.testCheckMate(opponent(currentPlayer))){
-        this.checkMate = true;
-        }else {
-        nextTurn();
+        if (this.testCheckMate(opponent(currentPlayer))) {
+            this.checkMate = true;
+        } else {
+            nextTurn();
         }
         return (ChessPiece) capturedPiece;
 
     }
 
     private Piece makeMove(Position origin, Position target) {
-        ChessPiece p = (ChessPiece)board.removePiece(origin);
+        ChessPiece p = (ChessPiece) board.removePiece(origin);
         p.increaseMoveCount();
         Piece capturedPiece = board.removePiece(target);
         if (capturedPiece != null) {
@@ -89,7 +87,7 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
     }
 
     private void undoMove(Position origin, Position target, Piece capturedPiece) {
-        ChessPiece p = (ChessPiece)board.removePiece(target);
+        ChessPiece p = (ChessPiece) board.removePiece(target);
         p.decreaseMoveCount();
         board.placePiece(p, origin);
 
@@ -133,11 +131,30 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
     }
 
     public void initialSetup() {
-        placeNewPiece('h', 7, new Rook(board, COLOR.WHITE));
-        placeNewPiece('d', 1, new Rook(board, COLOR.WHITE));
+        placeNewPiece('a', 1, new Rook(board, COLOR.WHITE));
         placeNewPiece('e', 1, new King(board, COLOR.WHITE));
-        placeNewPiece('b', 8, new Rook(board, COLOR.BLACK));
-        placeNewPiece('a', 8, new King(board, COLOR.BLACK));
+        placeNewPiece('h', 1, new Rook(board, COLOR.WHITE));
+        placeNewPiece('a', 2, new Pawn(board, COLOR.WHITE));
+        placeNewPiece('b', 2, new Pawn(board, COLOR.WHITE));
+        placeNewPiece('c', 2, new Pawn(board, COLOR.WHITE));
+        placeNewPiece('d', 2, new Pawn(board, COLOR.WHITE));
+        placeNewPiece('e', 2, new Pawn(board, COLOR.WHITE));
+        placeNewPiece('f', 2, new Pawn(board, COLOR.WHITE));
+        placeNewPiece('g', 2, new Pawn(board, COLOR.WHITE));
+        placeNewPiece('h', 2, new Pawn(board, COLOR.WHITE));
+
+        placeNewPiece('a', 8, new Rook(board, COLOR.BLACK));
+        placeNewPiece('e', 8, new King(board, COLOR.BLACK));
+        placeNewPiece('h', 8, new Rook(board, COLOR.BLACK));
+        placeNewPiece('a', 7, new Pawn(board, COLOR.BLACK));
+        placeNewPiece('b', 7, new Pawn(board, COLOR.BLACK));
+        placeNewPiece('c', 7, new Pawn(board, COLOR.BLACK));
+        placeNewPiece('d', 7, new Pawn(board, COLOR.BLACK));
+        placeNewPiece('e', 7, new Pawn(board, COLOR.BLACK));
+        placeNewPiece('f', 7, new Pawn(board, COLOR.BLACK));
+        placeNewPiece('g', 7, new Pawn(board, COLOR.BLACK));
+        placeNewPiece('h', 7, new Pawn(board, COLOR.BLACK));
+
     }
 
     private COLOR opponent(COLOR color) {
@@ -148,7 +165,7 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
         List<Piece> list = this.piecesOnTheBoard.stream().filter(x -> ((ChessPiece) x).getColor().equals(color)).collect(Collectors.toList());
         for (Piece p : list) {
             if (p instanceof King) {
-                return (ChessPiece)p;
+                return (ChessPiece) p;
             }
         }
         throw new IllegalStateException("There's no " + color + " king on the board.");
