@@ -5,6 +5,7 @@ import Chess.Exceptions.ChessException;
 import Chess.Pieces.Bishop;
 import Chess.Pieces.Rook;
 import Chess.Pieces.King;
+import Chess.Pieces.Knight;
 import Chess.Pieces.Pawn;
 import boardGame.Board;
 import boardGame.Piece;
@@ -132,6 +133,9 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
     }
 
     public void initialSetup() {
+
+        placeNewPiece('b', 1, new Knight(board, COLOR.WHITE));
+        placeNewPiece('g', 1, new Knight(board, COLOR.WHITE));
         placeNewPiece('c', 1, new Bishop(board, COLOR.WHITE));
         placeNewPiece('f', 1, new Bishop(board, COLOR.WHITE));
         placeNewPiece('a', 1, new Rook(board, COLOR.WHITE));
@@ -147,6 +151,8 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
         placeNewPiece('h', 2, new Pawn(board, COLOR.WHITE));
         placeNewPiece('c', 8, new Bishop(board, COLOR.BLACK));
         placeNewPiece('f', 8, new Bishop(board, COLOR.BLACK));
+        placeNewPiece('b', 8, new Knight(board, COLOR.BLACK));
+        placeNewPiece('g', 8, new Knight(board, COLOR.BLACK));
         placeNewPiece('a', 8, new Rook(board, COLOR.BLACK));
         placeNewPiece('e', 8, new King(board, COLOR.BLACK));
         placeNewPiece('h', 8, new Rook(board, COLOR.BLACK));

@@ -66,7 +66,7 @@ public class UI {//user interface
             }
             System.out.println("\n");
         }
-        System.out.println("  a  b  c  d  e  f  g  h");
+        System.out.println(" a  b  c  d  e  f  g  h");
     }
 
     public static void printMatch(ChessMatch chessMatch, List<ChessPiece> captured) {
