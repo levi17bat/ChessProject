@@ -77,7 +77,8 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
     }
 
     private Piece makeMove(Position origin, Position target) {
-        Piece p = board.removePiece(origin);
+        ChessPiece p = (ChessPiece)board.removePiece(origin);
+        p.increaseMoveCount();
         Piece capturedPiece = board.removePiece(target);
         if (capturedPiece != null) {
             this.piecesOnTheBoard.remove(capturedPiece);
@@ -88,7 +89,8 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
     }
 
     private void undoMove(Position origin, Position target, Piece capturedPiece) {
-        Piece p = board.removePiece(target);
+        ChessPiece p = (ChessPiece)board.removePiece(target);
+        p.decreaseMoveCount();
         board.placePiece(p, origin);
 
         if (capturedPiece != null) {
