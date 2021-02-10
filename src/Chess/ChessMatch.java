@@ -81,11 +81,34 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
         ChessPiece p = (ChessPiece) board.removePiece(origin);
         p.increaseMoveCount();
         Piece capturedPiece = board.removePiece(target);
+        board.placePiece(p, target);
         if (capturedPiece != null) {
             this.piecesOnTheBoard.remove(capturedPiece);
             this.capturedPieces.add(capturedPiece);
         }
-        board.placePiece(p, target);
+        
+        //#specialMove castling kingside rook
+        if(p instanceof King && target.getColumn() == origin.getColumn()+2){
+            Position sourceT = new Position(origin.getRow(),origin.getColumn()+3);
+            Position targetT = new Position(origin.getRow(),origin.getColumn()+1);
+            ChessPiece rook = (ChessPiece)this.board.removePiece(sourceT);
+            this.board.placePiece(rook, targetT);
+            rook.increaseMoveCount();
+            
+            
+        }
+        
+        //#specialMove castling queenside rook
+        if(p instanceof King && target.getColumn() == origin.getColumn()-2){
+            Position sourceT = new Position(origin.getRow(),origin.getColumn()-4);
+            Position targetT = new Position(origin.getRow(),origin.getColumn()-1);
+            ChessPiece rook = (ChessPiece)this.board.removePiece(sourceT);
+            this.board.placePiece(rook, targetT);
+            rook.increaseMoveCount();
+            
+            
+        }
+        
         return capturedPiece;
     }
 
@@ -99,6 +122,31 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
             capturedPieces.remove(capturedPiece);
             this.piecesOnTheBoard.add(capturedPiece);
         }
+        
+        //#specialUndoMove castling kingside rook
+        if(p instanceof King && target.getColumn() == origin.getColumn()+2){
+            Position sourceT = new Position(origin.getRow(),origin.getColumn()+3);
+            Position targetT = new Position(origin.getRow(),origin.getColumn()+1);
+            ChessPiece rook = (ChessPiece)this.board.removePiece(targetT);
+            this.board.placePiece(rook, sourceT);
+            rook.decreaseMoveCount();
+            
+            
+        }
+        
+        //#specialUndoMove castling queenside rook
+        if(p instanceof King && target.getColumn() == origin.getColumn()-2){
+            Position sourceT = new Position(origin.getRow(),origin.getColumn()-4);
+            Position targetT = new Position(origin.getRow(),origin.getColumn()-1);
+            ChessPiece rook = (ChessPiece)this.board.removePiece(targetT);
+            this.board.placePiece(rook, sourceT);
+            rook.decreaseMoveCount();
+            
+            
+        }
+        
+        
+        
 
     }
 
@@ -140,7 +188,7 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
         placeNewPiece('c', 1, new Bishop(board, COLOR.WHITE));
         placeNewPiece('f', 1, new Bishop(board, COLOR.WHITE));
         placeNewPiece('a', 1, new Rook(board, COLOR.WHITE));
-        placeNewPiece('e', 1, new King(board, COLOR.WHITE));
+        placeNewPiece('e', 1, new King(board, COLOR.WHITE,this));
         placeNewPiece('h', 1, new Rook(board, COLOR.WHITE));
         placeNewPiece('a', 2, new Pawn(board, COLOR.WHITE));
         placeNewPiece('b', 2, new Pawn(board, COLOR.WHITE));
@@ -159,7 +207,7 @@ public class ChessMatch {//o coração do nosso jogo de xadrez
         placeNewPiece('b', 8, new Knight(board, COLOR.BLACK));
         placeNewPiece('g', 8, new Knight(board, COLOR.BLACK));
         placeNewPiece('a', 8, new Rook(board, COLOR.BLACK));
-        placeNewPiece('e', 8, new King(board, COLOR.BLACK));
+        placeNewPiece('e', 8, new King(board, COLOR.BLACK,this));
         placeNewPiece('h', 8, new Rook(board, COLOR.BLACK));
         placeNewPiece('a', 7, new Pawn(board, COLOR.BLACK));
         placeNewPiece('b', 7, new Pawn(board, COLOR.BLACK));
